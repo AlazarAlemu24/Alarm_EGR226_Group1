@@ -1,3 +1,9 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         keypad.c
+ *Description:  Function declarations for initializing and reading the keypad. */
+
 #include "keypad.h"
 
 /*Keypad initialization function.
@@ -36,7 +42,7 @@ int read_keypad(){
         P3->DIR &= ~(BIT5 | BIT6 | BIT7);       // set column bits to inputs
         P3->DIR |= (1<<col);                    //set column pin as output
         P3->OUT &= ~(1<<col);                   //set column pin as LOW
-        SysTick_delay_ms(15);                   //configure pins/ debounce
+//        SysTick_delay_ms(15);                   //configure pins/ debounce
 
         row = P2->IN & (0b11110000);
 

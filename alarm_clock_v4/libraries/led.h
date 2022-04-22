@@ -1,3 +1,10 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         led.h
+ *Description:  Contains the function to initialize and turn ON/OFF the LED
+ *              lights. */
+
 #include <msp.h>
 
 

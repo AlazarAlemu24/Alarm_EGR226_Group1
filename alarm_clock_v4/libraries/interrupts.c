@@ -1,19 +1,29 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         interrupts.c
+ *Description:  Defines the various interrupt handlers used in the program. These
+ *              include port and TA types. */
+
 #include "interrupts.h"
 
 
+enum global_states{SET_TIME_OVERLAY, SET_TIME, SET_ALARM_OVERLAY, SET_ALARM, TICKING_OVERLAY, TICKING, SNOOZE_OVERLAY, BUTTON_PRESS};
 
-enum global_states{SET_TIME_OVERLAY, SET_TIME, SET_ALARM_OVERLAY, SET_ALARM, TICKING_OVERLAY, TICKING, SNOOZE_OVERLAY};
-enum set_states{NONE, HR_TENS, HR_ONES, MIN_TENS, MIN_ONES};
-
+/*Function:     TA1_0_IRQHandler()
+ *Description:  Timer A1 interrupt used to initialize LCD display */
 void TA1_0_IRQHandler(void)
 {
     TIMER_A1->CCTL[0] &= ~1;  // clear the interrupt flag
     hd44780_timer_isr();
 }
 
+/*Function:     TA0_0_IRQHandler()
+ *Description:  Timer A0 interrupt used to tick clock, blink displayed time while
+ *              setting time and alarm, and changing note while playing alarm */
 void TA0_0_IRQHandler(void)
 {
-    TIMER_A0->CCTL[0] &= ~1;
+    TIMER_A0->CCTL[0] &= ~1;  // clear the interrupt flag
     if(current_global_state == TICKING || current_global_state == SET_ALARM)
         deciseconds++;
 
@@ -24,53 +34,15 @@ void TA0_0_IRQHandler(void)
         note++;
 }
 
-//void TA2_0_IRQHandler(void)
-//{
-//    TIMER_A0->CCTL[0] &= ~1;
-//    if(current_global_state == SET_TIME || current_global_state == SET_ALARM)
-//        blink++;
-//}
-
+/*Function:     PORT5_IRQHandler()
+ *Description:  Port 5 interrupt used to handle button press */
 void PORT5_IRQHandler()
 {
-    switch(current_global_state)
-    {
-        case TICKING:
-            if(!alarm_sounding)
-            {
-                if(read_button0())
-                    current_global_state = SET_TIME_OVERLAY;
-                else if(read_button1())
-                    current_global_state = SET_ALARM_OVERLAY;
-            }
-            else
-            {
-                alarm_sounding = false;
-                if(read_button0())
-                    snoozing = true;
-                else if(read_button1())
-                    current_global_state = TICKING_OVERLAY;
-            }
-            break;
-        case SET_ALARM:
-            if(read_button0())
-            {
-                alarm_toggle();
-                toggle++;
-            }
-//            else if(read_button1())
-//            {
-//                current_set_state = NONE;
-//                current_global_state = TICKING_OVERLAY;
-//            }
-    }
-    P5->IFG &= ~3;// Clear the flag
-}
+    current_global_state = BUTTON_PRESS;
+    if(read_button0())
+        button = 1;
+    else if(read_button1())
+        button = 2;
 
-void alarm_toggle(void)
-{
-    if(alarm_set)
-        alarm_set = false;
-    else
-        alarm_set = true;
+    P5->IFG &= ~3;// Clear the flag
 }

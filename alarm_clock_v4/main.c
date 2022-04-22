@@ -1,3 +1,11 @@
+/*Author:       Ben Snyder
+ *Course:       EGR 226: Introduction to Digital Systems
+ *Assignment:   Final Project - Alarm Clock
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         main.c
+ *Description:  Main function iterates program's global switch machine */
+
 #include "msp.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,57 +21,55 @@
 #include "libraries/global_vars.h"
 #include "libraries/interrupts.h"
 
-
+/*Local function declarations*/
 void init_system(void);
-void global_state_machine(void);
+void global_switch_machine(void);
 
-enum global_states{SET_TIME_OVERLAY, SET_TIME, SET_ALARM_OVERLAY, SET_ALARM, TICKING_OVERLAY, TICKING, SNOOZE_OVERLAY};
-enum set_states{NONE, HR_TENS, HR_ONES, MIN_TENS, MIN_ONES};
+/*Global state enum conditional int for switch machine*/
+enum global_states{SET_TIME_OVERLAY, SET_TIME, SET_ALARM_OVERLAY, SET_ALARM, TICKING_OVERLAY, TICKING, SNOOZE_OVERLAY, BUTTON_PRESS};
 extern int current_global_state;
-extern int current_set_state;
 
-extern int deciseconds;
-extern int seconds;
-extern int minutes;
-extern int hours;
-
-extern int set_hr_tens;
-extern int set_hr_ones;
-extern int set_min_tens;
-extern int set_min_ones;
-
+/*main*/
 void main(void)
 {
-    init_system();
+    init_system();                  //Initialize system and peripheral components
 
     while(1)
     {
-        global_state_machine();
-//        play_scale();
+        global_switch_machine();    //Loop thru state machine
     }
 }
 
+/*Function:     init_system()
+ *Description:  Runs all initialization/setup functions for timers and external components */
 void init_system(void)
 {
     __disable_irq();
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
-    init_SysTick();
-    init_timer_A1();
-    init_timer_A0();
-    init_TA2_PWM();
-    init_keypad();
-    init_lcd();
-    init_button0();
-    init_button1();
-    init_led();
-    init_button_interrupts();
+    init_SysTick();                 //Initialize SysTick timer
+    init_timer_A1();                //Initialize Timer A1
+    init_timer_A0();                //Initialize Timer A0
+    init_TA2_PWM();                 //Initialize Timer A2
+    init_keypad();                  //Initialize keypad
+    init_lcd();                     //Initialize LCD display
+    init_button0();                 //Initialize button "0"
+    init_button1();                 //Initialize button "1"
+    init_led();                     //Initialize LED lights
+    init_button_interrupts();       //Initialize button interrupts
     __enable_irq();
 
-    set_vars();
-    hd44780_clear_screen();
+    set_vars();                     //Set all global variables to initial values
+    hd44780_clear_screen();         //Clear LCD display
 }
 
-void global_state_machine(void)
+/*Function:     global_switch_machine()
+ *Description:  State machine to facilitate the program's primary functions.
+ *              The primary states set the time, set the alarm, and tick the
+ *              clock. Each of these are preceded with an overlay, displaying
+ *              the relevant information for control on the screen. The snooze
+ *              state is an alternative overlay for ticking. The button press
+ *              state is an interrupt handler triggered by buttons. */
+void global_switch_machine(void)
 {
     switch(current_global_state)
     {
@@ -88,5 +94,9 @@ void global_state_machine(void)
         case SNOOZE_OVERLAY:
             snooze_overlay();
             break;
+        case BUTTON_PRESS:
+            button_press();
+            break;
     }
+
 }

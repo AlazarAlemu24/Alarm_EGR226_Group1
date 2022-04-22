@@ -41,6 +41,9 @@ main.obj: ../libraries/timers.h
 main.obj: ../libraries/keypad.h
 main.obj: D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h
 main.obj: ../libraries/timers.h
+main.obj: ../libraries/buttons.h
+main.obj: ../libraries/timers.h
+main.obj: ../libraries/led.h
 main.obj: ../libraries/global_vars.h
 main.obj: ../libraries/interrupts.h
 main.obj: D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h
@@ -129,6 +132,12 @@ D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h
 D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h:
 
 ../libraries/timers.h:
+
+../libraries/buttons.h:
+
+../libraries/timers.h:
+
+../libraries/led.h:
 
 ../libraries/global_vars.h:
 

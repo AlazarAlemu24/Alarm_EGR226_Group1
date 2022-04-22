@@ -30,6 +30,9 @@ libraries/states.obj: ../libraries/timers.h
 libraries/states.obj: ../libraries/keypad.h
 libraries/states.obj: D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h
 libraries/states.obj: ../libraries/timers.h
+libraries/states.obj: ../libraries/buttons.h
+libraries/states.obj: ../libraries/timers.h
+libraries/states.obj: ../libraries/led.h
 
 ../libraries/states.c:
 
@@ -90,4 +93,10 @@ D:/Programs/Code_Composer/workspace_v10/alarm_clock_v4/hd44780/hd44780.h:
 D:/Programs/ti/ccs1040/ccs/tools/compiler/ti-cgt-arm_20.2.6.LTS/include/stdlib.h:
 
 ../libraries/timers.h:
+
+../libraries/buttons.h:
+
+../libraries/timers.h:
+
+../libraries/led.h:
 

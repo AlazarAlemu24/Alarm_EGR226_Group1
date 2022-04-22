@@ -1,3 +1,10 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         button.h
+ *Description:  Functions included to initialize pines utilizing interrupts
+ *              activated by external components, i.e. buttons */
+
 #include <msp.h>
 #include <stdbool.h>
 #include <stdint.h>

@@ -1,6 +1,14 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         timers.c
+ *Description:  Initialize timers of SysTick, A1, A0, and A2; use Systick for
+ *              delay function. */
+
 #include "timers.h"
 
-
+/*Function:     init_SysTick(void)
+ *Description:  Initialize SysTick timer */
 void init_SysTick(void){
     SysTick->CTRL  &= ~BIT0;                             //clears enable to stop the counter
     SysTick->LOAD   = 0x00FFFFFF;                        //sets the period... note: (3006600/1000 - 1) = 1ms
@@ -8,6 +16,8 @@ void init_SysTick(void){
     SysTick->CTRL   = (STCSR_CLKSRC | STCSR_EN);         //enable SysTick with core clock, no interrupts -> this is the ENABLE and CLKSOURSE bits: Systic->CTRL |= 0x05;
 }
 
+/*Function:     SysTick_delay_ms(uint32_t ms_delay)
+ *Description:  Set up function to delay based on inputed value in ms */
 void SysTick_delay_ms(uint32_t ms_delay){
     //Delays time_ms number of milliseconds
     //Assume 3MHz clock -> 3000 cycles per millisecond
@@ -18,6 +28,8 @@ void SysTick_delay_ms(uint32_t ms_delay){
     SysTick->CTRL &= ~(STCSR_CLKSRC | STCSR_EN);      // Disable the Systic timer               .... Systic->CTRL =0 ;
 }
 
+/*Function:     init_timer_A1()
+ *Description:  Initialize Timer A1 */
 void init_timer_A1()
 {
     TIMER_A1->CTL = 0x02D1;// SMCLK, ID= /8, up mode, TA clear
@@ -29,18 +41,22 @@ void init_timer_A1()
     NVIC_EnableIRQ(TA1_0_IRQn);
 }
 
+/*Function:     init_timer_A0()
+ *Description:  Initialize Timer A0 */
 void init_timer_A0(void)
 {
     TIMER_A0->CTL = 0x02D1;// SMCLK, ID= /8, up mode, TA clear
     TIMER_A0->EX0 = 7; // Divide by 8;
-    TIMER_A0->CCR[0] = (18702 / 2); // Value in Cycles for 100ms
+    TIMER_A0->CCR[0] = 4878; // Value in Cycles for 100ms
     TIMER_A0->CCTL[0] |= 0x10; // Enable TA1.0 interrupt
 
     NVIC_SetPriority(TA0_0_IRQn, 3); // Set priority to 3 in NVIC
     NVIC_EnableIRQ(TA0_0_IRQn);
 }
 
-void init_TA2_PWM(){
+/*Function:     init_timer_A2()
+ *Description:  Initialize Timer A2 */
+void init_TA2_PWM(void){
 
     /* TA2 */
     TIMER_A2->CTL = 0b0000001000010100;

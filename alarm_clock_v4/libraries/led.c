@@ -1,6 +1,14 @@
+/*Author:       Ben Snyder
+ *Date:         4/21/22
+ *Instructor:   Michael Doran
+ *File:         led.c
+ *Description:  Contains the function to initialize and turn ON/OFF the LED
+ *              lights. */
+
 #include "led.h"
 
-
+/*Function:     init_led()
+ *Description:  Initialize pins for LED lights */
 void init_led(void)
 {
     CLR(P3->SEL0, 3);
@@ -17,6 +25,8 @@ void init_led(void)
     led_off(LED1);
 }
 
+/*Function:     led_on()
+ *Description:  Turn ON LED light of LED that is passed */
 void led_on(int led)
 {
     if(led == LED0)
@@ -29,6 +39,8 @@ void led_on(int led)
     }
 }
 
+/*Function:     led_off()
+ *Description:  Turn OFF LED light of LED that is passed */
 void led_off(int led)
 {
     if(led == LED0)
