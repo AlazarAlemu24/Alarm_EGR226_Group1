@@ -1,1 +1,0 @@
-"./app_logic.obj" "./button.obj" "./led.obj" "./main.obj" "./startup_msp432p401r_ccs.obj" "./system_msp432p401r.obj" "./util.obj" "./hd44780/hd44780.obj" "../msp432p401r.cmd" -llibc.a 
